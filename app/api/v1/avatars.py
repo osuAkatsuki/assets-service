@@ -49,7 +49,7 @@ async def upload_avatar(
             status_code=_get_status_code_for_error(data.code),
             content=data.user_feedback,
         )
-    return Response(status_code=201)
+    return Response(status_code=204)
 
 
 @router.get("/api/v1/avatars/{file_path:path}")
@@ -101,4 +101,4 @@ async def delete_avatar(
             status_code=_get_status_code_for_error(data.code),
             content=data.user_feedback,
         )
-    return Response(status_code=201)
+    return Response(status_code=204)
