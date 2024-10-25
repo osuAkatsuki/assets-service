@@ -143,7 +143,7 @@ async def upload_image(
     await s3.upload(
         body=image_content,
         file_name=f"{no_ext_file_name}.{image_format.lower()}",
-        folder=image_type.get_s3_folder(),
+        directory=image_type.get_s3_folder(),
         content_type=image_mime_type,
     )
     logging.info(
@@ -157,3 +157,24 @@ async def upload_image(
     )
 
     return None
+
+
+async def delete_image(
+    image_type: ImageType,
+    no_ext_file_name: str,
+    authorization: AbstractAuthorization,
+) -> None | Error:
+    for ext in ["png", "jpg", "jpeg", "gif", "webp"]:
+        await s3.delete(
+            file_name=f"{no_ext_file_name}.{ext}",
+            directory=image_type.get_s3_folder(),
+        )
+
+    logging.info(
+        "Deleted image",
+        extra={
+            "file_name": no_ext_file_name,
+            "image_type": image_type,
+            "authorization": authorization.format_for_logs(),
+        },
+    )
