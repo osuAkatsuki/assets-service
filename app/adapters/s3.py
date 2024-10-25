@@ -13,13 +13,13 @@ import settings
 async def upload(
     body: bytes,
     file_name: str,
-    folder: str,
+    directory: str,
     content_type: str | None = None,
     acl: str | None = None,
 ) -> None:
     params: dict[str, Any] = {
         "Bucket": settings.AWS_S3_BUCKET_NAME,
-        "Key": f"{folder}/{file_name}",
+        "Key": f"{directory}/{file_name}",
         "Body": body,
     }
     if content_type is not None:
@@ -60,3 +60,16 @@ async def download(file_name: str, directory: str) -> DownloadResponse | None:
         "body": body,
         "content_type": content_type,
     }
+
+
+async def delete(file_name: str, directory: str) -> None:
+    try:
+        await app.clients.s3_client.delete_object(
+            Bucket=settings.AWS_S3_BUCKET_NAME,
+            Key=f"{directory}/{file_name}",
+        )
+    except app.clients.s3_client.exceptions.NoSuchKey:
+        return None
+    except (botocore.exceptions.BotoCoreError, botocore.exceptions.ClientError) as exc:
+        logging.error("Failed to download file from S3", exc_info=exc)
+        return None

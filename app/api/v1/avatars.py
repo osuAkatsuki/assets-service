@@ -84,3 +84,21 @@ async def get_avatar(file_path: str):
         content=download_response["body"],
         media_type=download_response["content_type"],
     )
+
+
+@router.delete("/api/v1/users/{user_id}/avatar")
+async def delete_avatar(
+    user_id: int,
+    authorization: AdminAuthorization = Depends(authorize_admin),
+):
+    data = await app.usecases.images.delete_image(
+        image_type=ImageType.USER_AVATAR,
+        no_ext_file_name=f"{user_id}",
+        authorization=authorization,
+    )
+    if isinstance(data, Error):
+        return Response(
+            status_code=_get_status_code_for_error(data.code),
+            content=data.user_feedback,
+        )
+    return Response(status_code=201)
