@@ -19,7 +19,9 @@ class AdminAuthorization(AbstractAuthorization):
         return {"is_administrator": True}
 
 
-def authorize_admin(api_key: str = Header("X-Api-Key")) -> AdminAuthorization:
+def authorize_admin(
+    api_key: str = Header(..., alias="X-Api-Key"),
+) -> AdminAuthorization:
     if api_key != settings.APP_API_KEY:
         raise HTTPException(status_code=401, detail="Unauthorized")
 
