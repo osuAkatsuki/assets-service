@@ -169,8 +169,9 @@ async def delete_image(
             file_name=f"{no_ext_file_name}.{ext}",
             directory=image_type.get_s3_folder(),
         )
+
     logging.info(
-        "Deleted Image",
+        "Deleted image",
         extra={
             "file_name": no_ext_file_name,
             "image_type": image_type,
