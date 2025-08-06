@@ -25,7 +25,7 @@ async def get_profile_background(file_path: str):
         )
         return Response(status_code=404)
 
-    logging.info(
+    logging.debug(
         "Served user profile background",
         extra={"file_path": file_path},
     )

@@ -78,7 +78,7 @@ async def get_avatar(file_path: str):
 
         file_path = settings.DEFAULT_AVATAR_FILENAME
 
-    logging.info("Served user avatar", extra={"file_path": file_path})
+    logging.debug("Served user avatar", extra={"file_path": file_path})
 
     return Response(
         content=download_response["body"],
